@@ -3,6 +3,10 @@ import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
 
+/**
+ * 
+ * @author Vicentini Elia, Gandini Simone
+ */
 public class EchoServer {
 
     public static final int PORT = 5000; // porta al di fuori del range 1-4096 !

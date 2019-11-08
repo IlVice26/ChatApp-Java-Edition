@@ -14,7 +14,7 @@ import java.util.logging.Logger;
  */
 /**
  *
- * @author 17821
+ * @author Vicentini Elia, Gandini Simone
  */
 public class RunnablesClient implements Runnable {
     ArrayList<String> user = new ArrayList<>();

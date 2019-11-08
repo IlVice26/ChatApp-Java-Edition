@@ -17,7 +17,7 @@ import java.util.logging.Logger;
  */
 /**
  *
- * @author 17821
+ * @author Vicentini Elia, Gandini Simone
  */
 public class Runnables implements Runnable {
 
@@ -31,7 +31,7 @@ public class Runnables implements Runnable {
 
     @Override
     public void run() {
-// creazione stream di input da clientSocket:
+
         InputStreamReader stringaIn;
         OutputStreamWriter stringaOut;
         BufferedWriter buffer;
@@ -40,7 +40,7 @@ public class Runnables implements Runnable {
         try {
             stringaIn = new InputStreamReader(mySock.getInputStream());
             BufferedReader in = new BufferedReader(stringaIn);
-// ciclo di ricezione dal client e invio di risposta
+
             while (true) {
                 String str = in.readLine();
                 if (str.equals("quit")) {
@@ -57,7 +57,7 @@ public class Runnables implements Runnable {
             }
 
             listaSocket.remove(mySock);
-// chiusura di stream e socket
+            
         } catch (IOException ex) {
             System.out.println("EchoServer: chiudo...");
             Logger.getLogger(Runnables.class.getName()).log(Level.SEVERE, null, ex);
