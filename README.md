@@ -1,2 +1,2 @@
-## Welcome to ChatApp 2.0 Java Edition
+## Welcome to ChatApp Java Edition
 
