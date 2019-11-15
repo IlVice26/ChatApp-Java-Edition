@@ -27,6 +27,7 @@ public class EchoServer {
                 Runnables r = new Runnables(listaSocket, clientSocket);
                 Thread t1 = new Thread(r);
                 t1.start();
+                System.out.println(listaSocket.toString());
 
             } catch (IOException e) {
                 System.err.println("Ricezione fallita");
