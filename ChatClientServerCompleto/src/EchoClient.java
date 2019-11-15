@@ -6,6 +6,7 @@ import java.util.ArrayList;
 /**
  * 
  * @author Vicentini Elia, Gandini Simone
+ * @version dev01
  */
 public class EchoClient {
 
