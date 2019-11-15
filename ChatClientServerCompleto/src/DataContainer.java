@@ -6,6 +6,8 @@ import java.net.Socket;
  * 
  * DataContainer
  * 
+ * Contiene tutti i dati sincronizzati del server e viene creato da EchoServer. 
+ * 
  * @author Vicentini Elia, Gandini Simone
  * @version dev01
  */

@@ -6,6 +6,13 @@ import java.util.Scanner;
 
 /**
  * 
+ * EchoServer
+ * 
+ * Classe principale per la gestione del server
+ * Crea inizialmente un ServerSocket con una porta di default (5000). Ad ogni
+ * creazione di un socket viene creato un apposito thread per l'ascolto dei
+ * messaggi.
+ * 
  * @author Vicentini Elia, Gandini Simone
  * @version dev01
  */

@@ -9,6 +9,10 @@ import java.util.logging.Logger;
 
 /**
  *
+ * RunnablesClient
+ * 
+ * Thread dedicato al Client per l'invio dei messaggi al server.
+ * 
  * @author Vicentini Elia, Gandini Simone
  * @version dev01
  */

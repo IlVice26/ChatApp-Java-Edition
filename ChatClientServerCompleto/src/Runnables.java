@@ -11,7 +11,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
+ *  
+ * Runnables
+ * 
+ * Thread creato da EchoServer per la ricezione dei messaggi con il Client.
+ * 
  * @author Vicentini Elia, Gandini Simone
  * @version dev01
  */

@@ -5,6 +5,10 @@ import java.util.ArrayList;
 
 /**
  * 
+ * EchoClient
+ * 
+ * Classe principale del Client.
+ * 
  * @author Vicentini Elia, Gandini Simone
  * @version dev01
  */
