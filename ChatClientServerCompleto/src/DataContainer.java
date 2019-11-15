@@ -1,6 +1,6 @@
 
 import java.util.ArrayList;
-
+import java.net.Socket;
 
 /**
  * 
@@ -12,10 +12,22 @@ import java.util.ArrayList;
 public class DataContainer {
     
     // Global variables
-    private ArrayList userContainer;
+    private ArrayList<Socket> userContainer;
     
     public DataContainer(){
-        userContainer = new ArrayList();
+        userContainer = new ArrayList<>();
+    }
+    
+    public synchronized void addUser(Socket socket){
+        userContainer.add(socket);
+    }
+    
+    public synchronized void remUser(Socket socket){
+        boolean remove = userContainer.remove(socket);
+    }
+    
+    public synchronized String viewUsers(){
+        return userContainer.toString();
     }
     
 }

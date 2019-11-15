@@ -17,9 +17,9 @@ public class EchoClient {
         user = new ArrayList<>();
         String indirizzo;
         if (args.length == 0) {
-            indirizzo = "172.16.3.239";
+            indirizzo = "172.16.3.240";
         } else {
-            indirizzo = "172.16.3.239";
+            indirizzo = "172.16.3.240";
         }
         try {
 
@@ -45,7 +45,6 @@ public class EchoClient {
             while (true) {
                 userInput = stdIn.readLine();
                 if (userInput.equals("quit")) {
-                    out.println(str + " ha abbandonato la chat ");
                     out.println("quit");
                     break;
                 }

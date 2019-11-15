@@ -14,21 +14,25 @@ public class EchoServer {
 
     public static void main(String[] args) throws IOException {
         ServerSocket serverSocket = new ServerSocket(PORT);
-
+        DataContainer users = new DataContainer();
+        
         System.out.println("EchoServer: avviato ");
         System.out.println("Socket del server: " + serverSocket);
         ArrayList<Socket> listaSocket = new ArrayList<>();
         
         while (true) {
             try {
-                Socket clientSocket = serverSocket.accept(); // in attesa finchè non avviene una connessione
-                System.out.println("EchoServer: connesso: " + clientSocket);
-                listaSocket.add(clientSocket);
-                Runnables r = new Runnables(listaSocket, clientSocket);
+                // Server in attesa della connessione
+                Socket clientSocket = serverSocket.accept();
+                
+                // Stampa dell'utente connesso al server
+                System.out.println("Client connesso: " + clientSocket.getInetAddress().toString().replace("/", ""));
+                
+                // Creazione di un thread dedicato al client
+                Runnables r = new Runnables(clientSocket, users);
                 Thread t1 = new Thread(r);
                 t1.start();
-                System.out.println(listaSocket.toString());
-
+                
             } catch (IOException e) {
                 System.err.println("Ricezione fallita");
                 System.exit(1);

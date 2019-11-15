@@ -17,17 +17,23 @@ import java.util.logging.Logger;
  */
 public class Runnables implements Runnable {
 
-    ArrayList<Socket> listaSocket = new ArrayList<>();
-    Socket mySock;
-
-    Runnables(ArrayList<Socket> listaSocket, Socket clientSocket) {
+    private ArrayList<Socket> listaSocket = new ArrayList<>();
+    private Socket mySock;
+    private DataContainer users;
+    
+    Runnables(Socket clientSocket, DataContainer users) {
         this.listaSocket = listaSocket;
         this.mySock = clientSocket;
+        this.users = users;
+        synchronized (users) {
+            users.addUser(mySock);
+            System.out.println(users.viewUsers());
+        }
     }
 
     @Override
     public void run() {
-
+        
         InputStreamReader stringaIn;
         OutputStreamWriter stringaOut;
         BufferedWriter buffer;
@@ -40,10 +46,10 @@ public class Runnables implements Runnable {
             while (true) {
                 String str = in.readLine();
                 if (str.equals("quit")) {
-                    System.out.println("Chiudo la connesione con: " + mySock);
+                    System.out.println("Richesta chiusura connessione con " + mySock.getInetAddress().toString().replace("/", ""));
                     break;
                 }
-                //System.out.println("Ripeto il messaggio ricevuto da: " + mySock + " " + str);
+                System.out.println("Messaggio ricevuto da: " + mySock.getInetAddress().toString().replace("/", "") + " " + str);
                 for (int i = 0; i < listaSocket.size(); i++) {
                     stringaOut = new OutputStreamWriter(listaSocket.get(i).getOutputStream());
                     buffer = new BufferedWriter(stringaOut);
