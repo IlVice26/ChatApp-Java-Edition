@@ -27,7 +27,6 @@ public class Runnables implements Runnable {
         this.users = users;
         synchronized (users) {
             users.addUser(mySock);
-            System.out.println(users.viewUsers());
         }
     }
 

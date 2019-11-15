@@ -2,6 +2,7 @@
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 /**
  * 
@@ -19,6 +20,12 @@ public class EchoServer {
         System.out.println("EchoServer: avviato ");
         System.out.println("Socket del server: " + serverSocket);
         ArrayList<Socket> listaSocket = new ArrayList<>();
+        Scanner keyboard = new Scanner(System.in);
+        
+        // Thread per l'inserimento dei comandi
+        ThreadCommandServer cmd = new ThreadCommandServer(keyboard, users);
+        Thread tCmd = new Thread(cmd);
+        tCmd.start();
         
         while (true) {
             try {
