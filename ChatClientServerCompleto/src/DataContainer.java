@@ -32,4 +32,8 @@ public class DataContainer {
         return userContainer.toString();
     }
     
+    public synchronized ArrayList<Socket> getList(){
+        return userContainer;
+    }
+    
 }

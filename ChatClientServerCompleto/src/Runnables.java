@@ -21,17 +21,13 @@ import java.util.logging.Logger;
  */
 public class Runnables implements Runnable {
 
-    private ArrayList<Socket> listaSocket = new ArrayList<>();
     private Socket mySock;
     private DataContainer users;
     
     Runnables(Socket clientSocket, DataContainer users) {
-        this.listaSocket = listaSocket;
         this.mySock = clientSocket;
         this.users = users;
-        synchronized (users) {
-            users.addUser(mySock);
-        }
+        synchronized (users) { users.addUser(mySock);}
     }
 
     @Override
@@ -53,20 +49,28 @@ public class Runnables implements Runnable {
                     break;
                 }
                 System.out.println("Messaggio ricevuto da: " + mySock.getInetAddress().toString().replace("/", "") + " " + str);
-                for (int i = 0; i < listaSocket.size(); i++) {
-                    stringaOut = new OutputStreamWriter(listaSocket.get(i).getOutputStream());
-                    buffer = new BufferedWriter(stringaOut);
-                    out = new PrintWriter(buffer, true);
-                    out.println(str);
+                int sizeList;
+                    
+                for (int i = 0; i < users.getList().size(); i++) {
+                    if (users.getList().get(i) != mySock){
+                        stringaOut = new OutputStreamWriter(users.getList().get(i).getOutputStream());
+                        buffer = new BufferedWriter(stringaOut);
+                        out = new PrintWriter(buffer, true);
+                        out.println(str);
+                    }
                 }
             }
-
-            listaSocket.remove(mySock);
+               
+            synchronized (users) {
+                users.remUser(mySock);
+            } 
             
         } catch (IOException ex) {
-            System.out.println("EchoServer: chiudo...");
-            Logger.getLogger(Runnables.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            System.out.println("Disconessione improvvisa del client " + mySock.getInetAddress().toString().replace("/", ""));
+            synchronized (users) {
+                users.remUser(mySock);
+            }
+        } 
 
     }
 

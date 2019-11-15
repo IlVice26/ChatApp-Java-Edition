@@ -46,9 +46,10 @@ public class EchoServer {
                 Runnables r = new Runnables(clientSocket, users);
                 Thread t1 = new Thread(r);
                 t1.start();
-                
+            } catch (BindException e) {
+                System.err.println("Server già avviato!");   
             } catch (IOException e) {
-                System.err.println("Ricezione fallita");
+                System.err.println("Errore nella creazione del server");
                 System.exit(1);
             }
         }
