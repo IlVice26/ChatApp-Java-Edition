@@ -14,26 +14,30 @@ import java.net.Socket;
 public class DataContainer {
     
     // Global variables
-    private ArrayList<Socket> userContainer;
+    private ArrayList<Socket> socketContainer;
+    private ArrayList<String> usersContainer;
     
     public DataContainer(){
-        userContainer = new ArrayList<>();
+        socketContainer = new ArrayList<>();
+        usersContainer = new ArrayList<>();
     }
     
-    public synchronized void addUser(Socket socket){
-        userContainer.add(socket);
+    public synchronized void addUser(Socket socket, String username){
+        socketContainer.add(socket);
+        usersContainer.add(username);
     }
     
-    public synchronized void remUser(Socket socket){
-        boolean remove = userContainer.remove(socket);
+    public synchronized void remUser(Socket socket, String username){
+        socketContainer.remove(socket);
+        usersContainer.remove(username);
     }
     
     public synchronized String viewUsers(){
-        return userContainer.toString();
+        return usersContainer.toString();
     }
     
-    public synchronized ArrayList<Socket> getList(){
-        return userContainer;
+    public synchronized ArrayList<Socket> getListSocket(){
+        return socketContainer;
     }
     
 }

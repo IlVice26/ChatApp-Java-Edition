@@ -14,16 +14,15 @@ import java.util.ArrayList;
  */
 public class EchoClient {
 
-    @SuppressWarnings("empty-statement")
     public static void main(String[] args) throws IOException {
 
         ArrayList<String> user;
         user = new ArrayList<>();
         String indirizzo;
         if (args.length == 0) {
-            indirizzo = "172.16.3.240";
+            indirizzo = "localhost";
         } else {
-            indirizzo = "172.16.3.240";
+            indirizzo = "localhost";
         }
         try {
             System.out.print("Provo la connessione con " + indirizzo + " ... ");
@@ -38,13 +37,16 @@ public class EchoClient {
             str = stdIn.readLine();
             user.add(str);
 
-            RunnablesClient r = new RunnablesClient(socket, user);
-            Thread t1 = new Thread(r);
-            t1.start();
-
             OutputStreamWriter osw = new OutputStreamWriter(socket.getOutputStream());
             BufferedWriter bw = new BufferedWriter(osw);
             PrintWriter out = new PrintWriter(bw, true);
+            
+            // Invio dell'username
+            out.println(str);
+            
+            RunnablesClient r = new RunnablesClient(socket, user);
+            Thread t1 = new Thread(r);
+            t1.start();
 
             while (true) {
                 userInput = stdIn.readLine();
@@ -53,7 +55,6 @@ public class EchoClient {
                     break;
                 }
                 out.println(str + ": " + userInput);
-                //System.out.println("Echo: " + in.readLine());
             }
 
             out.close();

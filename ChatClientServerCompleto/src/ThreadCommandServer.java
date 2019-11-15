@@ -38,8 +38,18 @@ public class ThreadCommandServer implements Runnable {
             switch (cmd) {
                 case "/users":
                     synchronized (users) {
-                        System.out.println(users.viewUsers());
+                        System.out.println("\n" + users.viewUsers() + "\n");
                     }
+                    break;
+                case "/?":
+                    System.out.println("\nComandi chat server:"
+                            + "\nComando     |     Descrizione" 
+                            + "\n/users      |     Visualizza tutti gli utenti collegati al server"
+                            + "\n/?          |     Visualizza tutti i comandi del server"
+                            + "\n");
+                    break;
+                default:
+                    System.out.println("\nComando sconosciuto\n");
             }
         }
     }

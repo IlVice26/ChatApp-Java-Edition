@@ -23,11 +23,14 @@ public class Runnables implements Runnable {
 
     private Socket mySock;
     private DataContainer users;
+    private String username;
+    private boolean printMessage = false;
     
-    Runnables(Socket clientSocket, DataContainer users) {
+    Runnables(Socket clientSocket, DataContainer users, String username) {
         this.mySock = clientSocket;
         this.users = users;
-        synchronized (users) { users.addUser(mySock);}
+        this.username = username;
+        synchronized (users) { users.addUser(mySock, username);}
     }
 
     @Override
@@ -43,32 +46,42 @@ public class Runnables implements Runnable {
             BufferedReader in = new BufferedReader(stringaIn);
 
             while (true) {
+                
+                // Lettura del messaggio da parte del client
                 String str = in.readLine();
+                
+                // Controllo se il messaggio è la stringa di chiusura del socket
                 if (str.equals("quit")) {
-                    System.out.println("Richesta chiusura connessione con " + mySock.getInetAddress().toString().replace("/", ""));
+                    System.out.println("\nRichesta chiusura connessione con " + mySock.getInetAddress().toString().replace("/", "") + "\n");
                     break;
                 }
-                System.out.println("Messaggio ricevuto da: " + mySock.getInetAddress().toString().replace("/", "") + " " + str);
-                int sizeList;
-                    
-                for (int i = 0; i < users.getList().size(); i++) {
-                    if (users.getList().get(i) != mySock){
-                        stringaOut = new OutputStreamWriter(users.getList().get(i).getOutputStream());
+                
+                // Print del messaggio, solitamente è false
+                if (printMessage != false){
+                    System.out.println("\nMessaggio ricevuto da: " + mySock.getInetAddress().toString().replace("/", "") + " " + str + "\n");
+                }
+                
+                // Invio dei messaggi a tutti i client
+                int sizeList;   
+                for (int i = 0; i < users.getListSocket().size(); i++) {
+                    if (users.getListSocket().get(i) != mySock){
+                        stringaOut = new OutputStreamWriter(users.getListSocket().get(i).getOutputStream());
                         buffer = new BufferedWriter(stringaOut);
                         out = new PrintWriter(buffer, true);
                         out.println(str);
                     }
                 }
             }
-               
+            
+            // Se viene inviata una stringa di chiusura, il server elimina il socket dalla lista
             synchronized (users) {
-                users.remUser(mySock);
+                users.remUser(mySock, username);
             } 
             
         } catch (IOException ex) {
-            System.out.println("Disconessione improvvisa del client " + mySock.getInetAddress().toString().replace("/", ""));
+            System.out.println("\nDisconessione improvvisa del client " + mySock.getInetAddress().toString().replace("/", "") + "\n");
             synchronized (users) {
-                users.remUser(mySock);
+                users.remUser(mySock, username);
             }
         } 
 

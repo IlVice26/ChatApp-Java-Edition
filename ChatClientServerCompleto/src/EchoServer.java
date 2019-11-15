@@ -22,7 +22,7 @@ public class EchoServer {
 
     public static void main(String[] args) throws IOException {
         ServerSocket serverSocket = new ServerSocket(PORT);
-        DataContainer users = new DataContainer();
+        DataContainer data = new DataContainer();
         
         System.out.println("EchoServer: avviato ");
         System.out.println("Socket del server: " + serverSocket);
@@ -30,7 +30,7 @@ public class EchoServer {
         Scanner keyboard = new Scanner(System.in);
         
         // Thread per l'inserimento dei comandi
-        ThreadCommandServer cmd = new ThreadCommandServer(keyboard, users);
+        ThreadCommandServer cmd = new ThreadCommandServer(keyboard, data);
         Thread tCmd = new Thread(cmd);
         tCmd.start();
         
@@ -39,17 +39,24 @@ public class EchoServer {
                 // Server in attesa della connessione
                 Socket clientSocket = serverSocket.accept();
                 
+                InputStreamReader stringaIn = new InputStreamReader(clientSocket.getInputStream());
+                BufferedReader in = new BufferedReader(stringaIn);
+                
+                // Lettura username
+                String username = in.readLine();
+                
                 // Stampa dell'utente connesso al server
-                System.out.println("Client connesso: " + clientSocket.getInetAddress().toString().replace("/", ""));
+                System.out.println("\nClient connesso: " + clientSocket.getInetAddress().toString().replace("/", "") + " Username: " + username + "\n");
                 
                 // Creazione di un thread dedicato al client
-                Runnables r = new Runnables(clientSocket, users);
+                Runnables r = new Runnables(clientSocket, data, username);
                 Thread t1 = new Thread(r);
                 t1.start();
+
             } catch (BindException e) {
                 System.err.println("Server già avviato!");   
             } catch (IOException e) {
-                System.err.println("Errore nella creazione del server");
+                System.err.println("\nErrore nella creazione del server\n");
                 System.exit(1);
             }
         }
