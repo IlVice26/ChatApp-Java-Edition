@@ -49,14 +49,9 @@ public class Runnables implements Runnable {
                 String str = in.readLine();
                 
                 // Controllo se il messaggio è la stringa di chiusura del socket
-                if (str.equals("quit")) {
+                if (str.equals("/quit")) {
                     System.out.println("\nRichesta chiusura connessione con " + mySock.getInetAddress().toString().replace("/", "") + "\n");
                     break;
-                }
-                
-                // Print del messaggio, solitamente è false
-                if (printMessage != false){
-                    System.out.println("\nMessaggio ricevuto da: " + mySock.getInetAddress().toString().replace("/", "") + " " + str + "\n");
                 }
                 
                 // Invio dei messaggi a tutti i client
@@ -77,7 +72,6 @@ public class Runnables implements Runnable {
             } 
             
         } catch (IOException ex) {
-            System.out.println("\nDisconessione improvvisa del client " + mySock.getInetAddress().toString().replace("/", "") + "\n");
             synchronized (users) {
                 users.remUser(mySock, username);
             }

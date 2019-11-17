@@ -1,4 +1,5 @@
 
+import java.io.IOException;
 import java.util.Scanner;
 
 /**
@@ -28,15 +29,16 @@ public class ThreadCommandServer implements Runnable {
     }
     
     @Override
-    public void run(){
+    public void run() {
         
         while (true){
             // Ascolto della tastiera per eventuali comandi
             System.out.print("Server> ");
             String cmd = serKeyboard.nextLine();
+            String cmd1 = cmd.replace(" ", "");
             
             // Comandi inseriti
-            switch (cmd) {
+            switch (cmd1) {
                 case "/users":
                     synchronized (data) {
                         System.out.println("\n" + data.viewUsers() + "\n");
@@ -44,10 +46,13 @@ public class ThreadCommandServer implements Runnable {
                     break;
                 case "/help":
                     System.out.println("\nComandi chat server:"
-                            + "\nComando     |     Descrizione" 
-                            + "\n/users      |     Visualizza tutti gli utenti collegati al server"
-                            + "\n/config     |     Visualizza la configurazione del server"
-                            + "\n/help       |     Visualizza tutti i comandi del server"
+                            + "\nComando        |       Descrizione" 
+                            + "\n/users         |       Visualizza tutti gli utenti collegati al server"
+                            + "\n/config        |       Visualizza la configurazione del server"
+                            + "\n/changename    |       Cambia il nome del server"
+                            + "\n/changeport    |       Cambia la porta del server (Richiede un riavvio per il funzionamento)"
+                            + "\n/changemotd    |       Cambia il motd (Message of the day) del server"
+                            + "\n/help          |       Visualizza tutti i comandi del server"
                             + "\n");
                     break;
                 case "/config":
@@ -57,6 +62,42 @@ public class ThreadCommandServer implements Runnable {
                                 + "\nPort: " + data.getPortServer()
                                 + "\nMotd: " + data.getMotdServer() + "\n");
                     }
+                    break;
+                case "/changename":
+                    System.out.print("\nNome: ");
+                    String name = serKeyboard.nextLine();
+                    try {
+                        data.setNameServer(name);
+                    } catch (IOException e) {
+                        System.out.println("Modifica non effettuta!");
+                        break;
+                    }
+                    
+                    System.out.println("Modifica effettuata con successo!\n");
+                    break;
+                case "/changeport":
+                    System.out.print("\nPorta: ");
+                    String port = serKeyboard.nextLine();
+                    try {
+                        data.setPortServer(port);
+                    } catch (IOException e) {
+                        System.out.println("Modifica non effettuta!");
+                        break;
+                    }  
+                    
+                    System.out.println("Modifica effettuata con successo! (Richiesto il riavvio per il corretto funzionamento)\n");
+                    break;
+                case "/changemotd":
+                    System.out.print("\nMotd: ");
+                    String motd = serKeyboard.nextLine();
+                    try {
+                        data.setMotdServer(motd);
+                    } catch (IOException e) {
+                        System.out.println("Modifica non effettuta!");
+                        break;
+                    }  
+                    
+                    System.out.println("Modifica effettuata con successo!\n");
                     break;
                 case "/quit":
                     System.exit(0);

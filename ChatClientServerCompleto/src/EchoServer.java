@@ -20,12 +20,12 @@ public class EchoServer {
 
     public static void main(String[] args) throws IOException {
         
-        DataContainer data = new DataContainer();
-        ServerSocket serverSocket = new ServerSocket(data.getPortServer());
-        
         System.out.println("ChatApp - Java Edition (dev01)"
                 + "\nCopyright 2019 - Vicentini Elia & Simone Gandini"
                 + "\n\nDigita /help per conoscere i comandi\n");
+        
+        DataContainer data = new DataContainer();
+        ServerSocket serverSocket = new ServerSocket(data.getPortServer());
         
         Scanner keyboard = new Scanner(System.in);
         
