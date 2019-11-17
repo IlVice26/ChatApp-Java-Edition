@@ -27,7 +27,7 @@ public class RunnablesClient implements Runnable {
             InputStreamReader isr = new InputStreamReader(mySock.getInputStream());
             BufferedReader in = new BufferedReader(isr);
             while (true) {
-                if(in.equals("quit"))break;
+                if(in.equals("/quit"))break;
                 System.out.println(in.readLine());
             }
         } catch (IOException ex) {

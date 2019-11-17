@@ -41,7 +41,14 @@ public class ThreadCommandServer implements Runnable {
             switch (cmd1) {
                 case "/users":
                     synchronized (data) {
-                        System.out.println("\n" + data.viewUsers() + "\n");
+                        if (data.getListUsers().size() == 0){
+                            System.out.println("\nLista utenti connessi attualmente al server: " + data.getListUsers().size() + "\n");
+                        } else {
+                            System.out.println("\nLista utenti connessi attualmente al server: " + data.getListUsers().size());
+                            for (int i = 0; i < data.getListUsers().size(); i++){
+                                System.out.println((i + 1) + ") " + data.getListUsers().get(i) + "\n");
+                            }
+                        }
                     }
                     break;
                 case "/help":
@@ -50,9 +57,11 @@ public class ThreadCommandServer implements Runnable {
                             + "\n/users         |       Visualizza tutti gli utenti collegati al server"
                             + "\n/config        |       Visualizza la configurazione del server"
                             + "\n/changename    |       Cambia il nome del server"
-                            + "\n/changeport    |       Cambia la porta del server (Richiede un riavvio per il funzionamento)"
+                            + "\n/changeport    |       Cambia la porta del server (Richiede il riavvio del server)"
                             + "\n/changemotd    |       Cambia il motd (Message of the day) del server"
                             + "\n/help          |       Visualizza tutti i comandi del server"
+                            + "\n/infoproject   |       Visualizza le informazioni del programma"
+                            + "\n/quit          |       Uscita dal server"
                             + "\n");
                     break;
                 case "/config":
@@ -85,7 +94,7 @@ public class ThreadCommandServer implements Runnable {
                         break;
                     }  
                     
-                    System.out.println("Modifica effettuata con successo! (Richiesto il riavvio per il corretto funzionamento)\n");
+                    System.out.println("Modifica effettuata con successo! (Riavvia il server per effettuare il cambiamento)\n");
                     break;
                 case "/changemotd":
                     System.out.print("\nMotd: ");
@@ -98,6 +107,13 @@ public class ThreadCommandServer implements Runnable {
                     }  
                     
                     System.out.println("Modifica effettuata con successo!\n");
+                    break;
+                case "/infoproject":
+                    System.out.println("\nInfo progetto ChatApp - Java Edition:"
+                            + "\nAutori: Vicentini Elia & Gandini Simone"
+                            + "\nVersione: dev01"
+                            + "\n\nIl progetto è opensource, potete trovarlo al seguente link:"
+                            + "\nhttps://github.com/IlVice26/ChatApp-Java-Edition\n");
                     break;
                 case "/quit":
                     System.exit(0);

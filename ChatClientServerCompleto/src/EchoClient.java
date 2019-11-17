@@ -46,11 +46,11 @@ public class EchoClient {
 
             while (true) {
                 userInput = stdIn.readLine();
-                if (userInput.equals("quit")) {
-                    out.println("quit");
+                if (userInput.equals("/quit")) {
+                    out.println("/quit");
                     break;
                 }
-                out.println(str + ": " + userInput);
+                out.println(userInput);
             }
 
             out.close();
@@ -66,6 +66,5 @@ public class EchoClient {
             System.err.print("Non riesco ad avere I/O per la connessione a: " + indirizzo + "\n");
             System.exit(1);
         }
-        System.out.println("EchoClient: passo e chiudo...");
     }
 }

@@ -44,6 +44,10 @@ public class DataContainer {
         return usersContainer.toString();
     }
     
+    public synchronized ArrayList<String> getListUsers() {
+        return usersContainer;
+    }
+    
     public synchronized ArrayList<Socket> getListSocket(){
         return socketContainer;
     }
