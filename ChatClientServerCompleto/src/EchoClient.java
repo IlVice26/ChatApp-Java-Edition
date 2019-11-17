@@ -1,7 +1,6 @@
 
 import java.net.*;
 import java.io.*;
-import java.util.ArrayList;
 
 /**
  * 
@@ -16,8 +15,6 @@ public class EchoClient {
 
     public static void main(String[] args) throws IOException {
 
-        ArrayList<String> user;
-        user = new ArrayList<>();
         String indirizzo;
         if (args.length == 0) {
             indirizzo = "localhost";
@@ -26,7 +23,7 @@ public class EchoClient {
         }
         try {
             System.out.print("Provo la connessione con " + indirizzo + " ... ");
-            Socket socket = new Socket(indirizzo, EchoServer.PORT);
+            Socket socket = new Socket(indirizzo, 5000);
             System.out.print("Connesso al server!");
             System.out.println("\nSocket del client: " + socket);
             System.out.print("Username: ");
@@ -35,7 +32,6 @@ public class EchoClient {
 
             BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
             str = stdIn.readLine();
-            user.add(str);
 
             OutputStreamWriter osw = new OutputStreamWriter(socket.getOutputStream());
             BufferedWriter bw = new BufferedWriter(osw);
@@ -44,7 +40,7 @@ public class EchoClient {
             // Invio dell'username
             out.println(str);
             
-            RunnablesClient r = new RunnablesClient(socket, user);
+            RunnablesClient r = new RunnablesClient(socket);
             Thread t1 = new Thread(r);
             t1.start();
 
@@ -62,7 +58,6 @@ public class EchoClient {
             stdIn.close();
             socket.close();
             t1.stop();
-            user.remove(str);
 
         } catch (UnknownHostException e) {
             System.err.print("Host non riconosciuto... " + indirizzo + "\n");

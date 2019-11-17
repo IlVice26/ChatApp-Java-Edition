@@ -15,10 +15,9 @@ import java.util.ArrayList;
  * @version dev01
  */
 public class RunnablesClient implements Runnable {
-    ArrayList<String> user = new ArrayList<>();
     Socket mySock;
 
-    RunnablesClient(Socket socket, ArrayList<String> user) {
+    RunnablesClient(Socket socket) {
         this.mySock = socket;
     }
 

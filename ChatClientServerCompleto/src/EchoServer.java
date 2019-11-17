@@ -18,15 +18,15 @@ import java.util.Scanner;
  */
 public class EchoServer {
 
-    public static final int PORT = 5000; // porta al di fuori del range 1-4096 !
-
     public static void main(String[] args) throws IOException {
-        ServerSocket serverSocket = new ServerSocket(PORT);
-        DataContainer data = new DataContainer();
         
-        System.out.println("EchoServer: avviato ");
-        System.out.println("Socket del server: " + serverSocket);
-        ArrayList<Socket> listaSocket = new ArrayList<>();
+        DataContainer data = new DataContainer();
+        ServerSocket serverSocket = new ServerSocket(data.getPortServer());
+        
+        System.out.println("ChatApp - Java Edition (dev01)"
+                + "\nCopyright 2019 - Vicentini Elia & Simone Gandini"
+                + "\n\nDigita /help per conoscere i comandi\n");
+        
         Scanner keyboard = new Scanner(System.in);
         
         // Thread per l'inserimento dei comandi
@@ -44,9 +44,6 @@ public class EchoServer {
                 
                 // Lettura username
                 String username = in.readLine();
-                
-                // Stampa dell'utente connesso al server
-                System.out.println("\nClient connesso: " + clientSocket.getInetAddress().toString().replace("/", "") + " Username: " + username + "\n");
                 
                 // Creazione di un thread dedicato al client
                 Runnables r = new Runnables(clientSocket, data, username);

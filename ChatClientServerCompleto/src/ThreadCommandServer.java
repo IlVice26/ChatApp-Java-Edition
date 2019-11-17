@@ -15,16 +15,16 @@ public class ThreadCommandServer implements Runnable {
     
     // Global variables
     private Scanner serKeyboard;
-    private DataContainer users;
+    private DataContainer data;
     
     /**
      * Costruttore
      * @param serKeyboard
-     * @param users 
+     * @param data 
      */
-    public ThreadCommandServer(Scanner serKeyboard, DataContainer users){
+    public ThreadCommandServer(Scanner serKeyboard, DataContainer data){
         this.serKeyboard = serKeyboard;
-        this.users = users;
+        this.data = data;
     }
     
     @Override
@@ -32,22 +32,34 @@ public class ThreadCommandServer implements Runnable {
         
         while (true){
             // Ascolto della tastiera per eventuali comandi
+            System.out.print("Server> ");
             String cmd = serKeyboard.nextLine();
-
+            
             // Comandi inseriti
             switch (cmd) {
                 case "/users":
-                    synchronized (users) {
-                        System.out.println("\n" + users.viewUsers() + "\n");
+                    synchronized (data) {
+                        System.out.println("\n" + data.viewUsers() + "\n");
                     }
                     break;
-                case "/?":
+                case "/help":
                     System.out.println("\nComandi chat server:"
                             + "\nComando     |     Descrizione" 
                             + "\n/users      |     Visualizza tutti gli utenti collegati al server"
-                            + "\n/?          |     Visualizza tutti i comandi del server"
+                            + "\n/config     |     Visualizza la configurazione del server"
+                            + "\n/help       |     Visualizza tutti i comandi del server"
                             + "\n");
                     break;
+                case "/config":
+                    synchronized (data) {
+                        System.out.println("\nConfigurazione server:"
+                                + "\nNome: " + data.getNameServer()
+                                + "\nPort: " + data.getPortServer()
+                                + "\nMotd: " + data.getMotdServer() + "\n");
+                    }
+                    break;
+                case "/quit":
+                    System.exit(0);
                 default:
                     System.out.println("\nComando sconosciuto\n");
             }
