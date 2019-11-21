@@ -20,7 +20,7 @@ public class EchoServer {
 
     public static void main(String[] args) throws IOException {
         
-        System.out.println("ChatApp - Java Edition (dev01)"
+        System.out.println("ChatApp - Java Edition (dev01) - Server"
                 + "\nCopyright 2019 - Vicentini Elia & Simone Gandini"
                 + "\n\nDigita /help per conoscere i comandi\n");
         

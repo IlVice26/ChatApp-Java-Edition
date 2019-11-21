@@ -1,6 +1,8 @@
 
 import java.net.*;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.util.Scanner;
 
 /**
  * 
@@ -14,13 +16,15 @@ import java.io.*;
 public class EchoClient {
 
     public static void main(String[] args) throws IOException {
-
-        String indirizzo;
-        if (args.length == 0) {
-            indirizzo = "localhost";
-        } else {
-            indirizzo = "localhost";
-        }
+        
+        System.out.println("ChatApp - Java Edition (dev01) - Client"
+                + "\nCopyright 2019 - Vicentini Elia & Simone Gandini"
+                + "\n\nDigita /help per conoscere i comandi\n");
+        
+        Scanner cliKeyboard = new Scanner(System.in);
+        
+        
+        
         try {
             System.out.print("Provo la connessione con " + indirizzo + " ... ");
             Socket socket = new Socket(indirizzo, 5000);
@@ -33,7 +37,7 @@ public class EchoClient {
             BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
             str = stdIn.readLine();
 
-            OutputStreamWriter osw = new OutputStreamWriter(socket.getOutputStream());
+            OutputStreamWriter osw = new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8);
             BufferedWriter bw = new BufferedWriter(osw);
             PrintWriter out = new PrintWriter(bw, true);
             

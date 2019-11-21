@@ -3,6 +3,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 /**
@@ -24,7 +25,7 @@ public class RunnablesClient implements Runnable {
     @Override
     public void run() {
         try {
-            InputStreamReader isr = new InputStreamReader(mySock.getInputStream());
+            InputStreamReader isr = new InputStreamReader(mySock.getInputStream(), StandardCharsets.UTF_8);
             BufferedReader in = new BufferedReader(isr);
             while (true) {
                 if(in.equals("/quit"))break;

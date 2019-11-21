@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -43,13 +44,13 @@ public class Runnables implements Runnable {
 
         try {
             
-            stringaOut = new OutputStreamWriter(mySock.getOutputStream());
+            stringaOut = new OutputStreamWriter(mySock.getOutputStream(), StandardCharsets.UTF_8);
             buffer = new BufferedWriter(stringaOut);
             out = new PrintWriter(buffer, true);
             out.println("\nBenvenuto sul server: " + data.getNameServer() + "!\n"
                     + data.getMotdServer() + "\n");
             
-            stringaIn = new InputStreamReader(mySock.getInputStream());
+            stringaIn = new InputStreamReader(mySock.getInputStream(), StandardCharsets.UTF_8);
             BufferedReader in = new BufferedReader(stringaIn);
 
             while (true) {
@@ -66,7 +67,7 @@ public class Runnables implements Runnable {
                 int sizeList;   
                 for (int i = 0; i < data.getListSocket().size(); i++) {
                     if (data.getListSocket().get(i) != mySock){
-                        stringaOut = new OutputStreamWriter(data.getListSocket().get(i).getOutputStream());
+                        stringaOut = new OutputStreamWriter(data.getListSocket().get(i).getOutputStream(), StandardCharsets.UTF_8);
                         buffer = new BufferedWriter(stringaOut);
                         out = new PrintWriter(buffer, true);
                         out.println(data.getListUsers().get(i) + ": " + str);
