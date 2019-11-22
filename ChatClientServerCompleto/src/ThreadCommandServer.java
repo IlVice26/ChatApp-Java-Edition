@@ -117,6 +117,8 @@ public class ThreadCommandServer implements Runnable {
                     break;
                 case "/quit":
                     System.exit(0);
+                case "":
+                    break;
                 default:
                     System.out.println("\nComando sconosciuto\n");
             }
