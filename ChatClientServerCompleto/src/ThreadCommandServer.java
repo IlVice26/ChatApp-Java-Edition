@@ -1,6 +1,8 @@
 
 import java.io.IOException;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *  
@@ -116,6 +118,15 @@ public class ThreadCommandServer implements Runnable {
                             + "\nhttps://github.com/IlVice26/ChatApp-Java-Edition\n");
                     break;
                 case "/quit":
+                    synchronized (data) {
+                        for (int i = 0; i < data.getListSocket().size(); i++){
+                            try {
+                                data.getListSocket().get(i).close();
+                            } catch (IOException ex) {
+                                
+                            }
+                        }
+                    }
                     System.exit(0);
                 case "":
                     break;

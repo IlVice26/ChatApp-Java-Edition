@@ -25,25 +25,29 @@ public class Runnables implements Runnable {
     private Socket mySock;
     private DataContainer data;
     private String username;
+    private InputStreamReader stringaIn;
+    private OutputStreamWriter stringaOut;
+    private BufferedWriter buffer;
+    private PrintWriter out;
     private boolean printMessage = false;
     
     Runnables(Socket clientSocket, DataContainer users, String username) {
         this.mySock = clientSocket;
         this.data = users;
         this.username = username;
-        synchronized (users) { users.addUser(mySock, username);}
+        synchronized (users) { 
+            users.addUser(mySock, username);
+        }
+        
     }
 
     @Override
     public void run() {
         
-        InputStreamReader stringaIn;
-        OutputStreamWriter stringaOut;
-        BufferedWriter buffer;
-        PrintWriter out;
+        
 
         try {
-            
+    
             stringaOut = new OutputStreamWriter(mySock.getOutputStream(), StandardCharsets.UTF_8);
             buffer = new BufferedWriter(stringaOut);
             out = new PrintWriter(buffer, true);
@@ -55,23 +59,28 @@ public class Runnables implements Runnable {
 
             while (true) {
                 
-                // Lettura del messaggio da parte del client
-                String str = in.readLine();
-                
-                // Controllo se il messaggio è la stringa di chiusura del socket
-                if (str.equals("/quit")) {
-                    break;
-                }
-                
-                // Invio dei messaggi a tutti i client
-                int sizeList;   
-                for (int i = 0; i < data.getListSocket().size(); i++) {
-                    if (data.getListSocket().get(i) != mySock){
-                        stringaOut = new OutputStreamWriter(data.getListSocket().get(i).getOutputStream(), StandardCharsets.UTF_8);
-                        buffer = new BufferedWriter(stringaOut);
-                        out = new PrintWriter(buffer, true);
-                        out.println(data.getListUsers().get(i) + ": " + str);
+                try {
+                    // Lettura del messaggio da parte del client
+                    String str = in.readLine();
+
+                    // Controllo se il messaggio è la stringa di chiusura del socket
+
+                    if (str.equals("/quit")) {
+                        break;
                     }
+
+                    // Invio dei messaggi a tutti i client
+                    int sizeList;   
+                    for (int i = 0; i < data.getListSocket().size(); i++) {
+                        if (data.getListSocket().get(i) != mySock){
+                            stringaOut = new OutputStreamWriter(data.getListSocket().get(i).getOutputStream(), StandardCharsets.UTF_8);
+                            buffer = new BufferedWriter(stringaOut);
+                            out = new PrintWriter(buffer, true);
+                            out.println(data.getListUsers().get(i) + ": " + str);
+                        }
+                    }
+                } catch (Exception e) {
+                    break;
                 }
             }
             
@@ -80,11 +89,21 @@ public class Runnables implements Runnable {
                 data.remUser(mySock, username);
             } 
             
+            mySock.close();
+            stringaIn.close();
+            stringaOut.close();
+            
         } catch (IOException ex) {
             synchronized (data) {
                 data.remUser(mySock, username);
             }
-        } 
+            try {
+                mySock.close();
+                stringaIn.close();
+                stringaOut.close();
+            } catch (IOException ex1) {
+            }
+        }
 
     }
 

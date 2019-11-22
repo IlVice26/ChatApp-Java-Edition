@@ -5,21 +5,26 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * RunnablesClient
- * 
+ *
  * Thread dedicato al Client per l'invio dei messaggi al server.
- * 
+ *
  * @author Vicentini Elia, Gandini Simone
  * @version dev01
  */
 public class RunnablesClient implements Runnable {
-    Socket mySock;
 
-    RunnablesClient(Socket socket) {
+    Socket mySock;
+    ThreadCommandClient thread;
+
+    RunnablesClient(Socket socket, ThreadCommandClient thread) {
         this.mySock = socket;
+        this.thread = thread;
     }
 
     @Override
@@ -28,12 +33,21 @@ public class RunnablesClient implements Runnable {
             InputStreamReader isr = new InputStreamReader(mySock.getInputStream(), StandardCharsets.UTF_8);
             BufferedReader in = new BufferedReader(isr);
             while (true) {
-                if(in.equals("/quit"))break;
-                System.out.println(in.readLine());
+                String mex = in.readLine();
+                if (mex == null) {
+                    System.out.println("Disconnesso dal server");
+                    thread.inChat = false;
+                    break;
+                } else {
+                    System.out.println(mex);
+                }
             }
         } catch (IOException ex) {
-            System.out.println("EchoServer: Connessione interrotta!");
-            System.exit(0);
+            //disconnesso dal server
+            thread.inChat = false;
+            try {
+                mySock.close();
+            } catch (IOException ex1) { }
         }
 
     }
