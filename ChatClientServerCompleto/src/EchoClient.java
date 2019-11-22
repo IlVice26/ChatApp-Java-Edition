@@ -23,7 +23,12 @@ public class EchoClient {
         
         Scanner cliKeyboard = new Scanner(System.in);
         
-        
-        
+        ThreadCommandClient cmd = new ThreadCommandClient(cliKeyboard);
+        Thread tCmd = new Thread(cmd);
+        tCmd.start();
+            
     }
+    
+    
+    
 }
