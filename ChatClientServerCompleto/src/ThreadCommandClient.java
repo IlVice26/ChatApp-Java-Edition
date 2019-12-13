@@ -81,7 +81,14 @@ public class ThreadCommandClient implements Runnable {
                         }
 
                         break;
-                    case "/exit":
+                    case "/help":
+                        System.out.println("\nComandi chat client:"
+                            + "\nComando        |       Descrizione"
+                            + "\n/connect       |       Connette il client al server" 
+                            + "\n/quit          |       Uscita dal server"
+                            + "\n");
+                        break;
+                    case "/quit":
                         System.exit(0);
                     case "":
                         break;
@@ -103,10 +110,17 @@ public class ThreadCommandClient implements Runnable {
                             out.close();
                             send.close();
                             this.inChat = false;
-                            System.out.println("");
+                            System.out.println("\n");
                         } catch (IOException ex) { 
                             this.inChat = false;
                         }
+                        break;
+                    case "/help":
+                        System.out.println("\nComandi chat client:"
+                            + "\nComando        |       Descrizione"
+                            + "\n/disconnect    |       Disconnette il client dal server" 
+                            + "\n/quit          |       Uscita dal server"
+                            + "\n");
                         break;
                     default:
                         send.println(cmd);

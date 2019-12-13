@@ -44,8 +44,6 @@ public class Runnables implements Runnable {
     @Override
     public void run() {
         
-        
-
         try {
     
             stringaOut = new OutputStreamWriter(mySock.getOutputStream(), StandardCharsets.UTF_8);
@@ -64,19 +62,19 @@ public class Runnables implements Runnable {
                     String str = in.readLine();
 
                     // Controllo se il messaggio è la stringa di chiusura del socket
-
                     if (str.equals("/quit")) {
                         break;
                     }
-
+                    
                     // Invio dei messaggi a tutti i client
+                    int indexUser = getIndexOfUser();
                     int sizeList;   
                     for (int i = 0; i < data.getListSocket().size(); i++) {
                         if (data.getListSocket().get(i) != mySock){
                             stringaOut = new OutputStreamWriter(data.getListSocket().get(i).getOutputStream(), StandardCharsets.UTF_8);
                             buffer = new BufferedWriter(stringaOut);
                             out = new PrintWriter(buffer, true);
-                            out.println(data.getListUsers().get(i) + ": " + str);
+                            out.println(data.getListUsers().get(indexUser) + ": " + str);
                         }
                     }
                 } catch (Exception e) {
@@ -97,6 +95,7 @@ public class Runnables implements Runnable {
             synchronized (data) {
                 data.remUser(mySock, username);
             }
+            System.out.println("Errore rilevato");
             try {
                 mySock.close();
                 stringaIn.close();
@@ -105,6 +104,15 @@ public class Runnables implements Runnable {
             }
         }
 
+    }
+    
+    private int getIndexOfUser(){
+        for (int i = 0; i < data.getListSocket().size(); i++) {
+            if (data.getListSocket().get(i) == mySock) {
+                return i;
+            }
+        }
+        return 0;
     }
 
 }

@@ -48,7 +48,11 @@ public class ThreadCommandServer implements Runnable {
                         } else {
                             System.out.println("\nLista utenti connessi attualmente al server: " + data.getListUsers().size());
                             for (int i = 0; i < data.getListUsers().size(); i++){
-                                System.out.println((i + 1) + ") " + data.getListUsers().get(i) + "\n");
+                                if (i == data.getListUsers().size() - 1) {   
+                                    System.out.println((i + 1) + ") " + data.getListUsers().get(i) + "\n");
+                                } else {
+                                    System.out.println((i + 1) + ") " + data.getListUsers().get(i));
+                                }
                             }
                         }
                     }

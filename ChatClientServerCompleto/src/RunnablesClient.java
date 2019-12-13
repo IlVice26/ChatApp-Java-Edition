@@ -35,7 +35,8 @@ public class RunnablesClient implements Runnable {
             while (true) {
                 String mex = in.readLine();
                 if (mex == null) {
-                    System.out.println("Disconnesso dal server");
+                    System.out.println("Disconnesso dal server, premere invio"
+                            + " per continuare.");
                     thread.inChat = false;
                     break;
                 } else {
@@ -43,7 +44,6 @@ public class RunnablesClient implements Runnable {
                 }
             }
         } catch (IOException ex) {
-            //disconnesso dal server
             thread.inChat = false;
             try {
                 mySock.close();
