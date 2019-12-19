@@ -5,12 +5,22 @@
  */
 package com.chatapp.server;
 
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.util.Scanner;
+
+
 /**
  *
- * @author vicen
+ * ChatAppServerFrame
+ * 
+ * @author Vicentini Elia, Simone Gandini
  */
 public class ChatAppServerFrame extends javax.swing.JFrame {
-
+    
+    static DataContainer data;
+    static ServerSocket serverSocket;
+    
     /**
      * Creates new form ChatAppServerFrame
      */
@@ -27,26 +37,130 @@ public class ChatAppServerFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        title = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        panelArea = new javax.swing.JTextArea();
+        sendButton = new javax.swing.JButton();
+        inputText = new javax.swing.JTextField();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("ChatApp - Java Edition (Server)");
+        setResizable(false);
+
+        title.setFont(new java.awt.Font("Calibri Light", 0, 18)); // NOI18N
+        title.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        title.setText("ChatApp - Java Edition (Server) ");
+        title.setAlignmentY(0.0F);
+        title.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+
+        panelArea.setEditable(false);
+        panelArea.setColumns(20);
+        panelArea.setRows(5);
+        jScrollPane1.setViewportView(panelArea);
+
+        sendButton.setText("Invia");
+        sendButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sendButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1)
+                    .addComponent(title, javax.swing.GroupLayout.DEFAULT_SIZE, 700, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(inputText)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(sendButton)
+                        .addGap(4, 4, 4)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(title, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 388, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(sendButton)
+                    .addComponent(inputText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void sendButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendButtonActionPerformed
+        String cmd = inputText.getText();
+        String cmd1 = cmd.replace(" ", "");
+
+        // Comandi inseriti
+        if (inputText.getText().contains("/users")) {
+            synchronized (data) {
+                if (data.getListUsers().isEmpty()){
+                    panelArea.append("\nLista utenti connessi attualmente al server: " + data.getListUsers().size() + "\n");
+                } else {
+                    panelArea.append("\nLista utenti connessi attualmente al server: " + data.getListUsers().size() + "\n");
+                    for (int i = 0; i < data.getListUsers().size(); i++){
+                        if (i == data.getListUsers().size() - 1) {   
+                            panelArea.append((i + 1) + ") " + data.getListUsers().get(i) + "\n");
+                        } else {
+                            panelArea.append((i + 1) + ") " + data.getListUsers().get(i));
+                        }
+                    }
+                }
+            }
+        } else if (inputText.getText().contains("/help")) {
+            panelArea.append("\nComandi chat server:\n"
+                + "\nComando        |       Descrizione" 
+                + "\n/users              |       Visualizza tutti gli utenti collegati al server"
+                + "\n/config              |       Visualizza la configurazione del server"
+                + "\n/help                 |       Visualizza tutti i comandi del server"
+                + "\n/infoproject      |       Visualizza le informazioni del programma"
+                + "\n/quit                   |       Uscita dal server"
+                + "\n");
+        } else if (inputText.getText().contains("/config")) {
+            synchronized (data) {
+                panelArea.append("\nConfigurazione server:"
+                    + "\nNome: " + data.getNameServer()
+                    + "\nPort: " + data.getPortServer()
+                    + "\nMotd: " + data.getMotdServer() + "\n");
+            }
+        } else if (inputText.getText().contains("/infoproject")) {
+            panelArea.append("\nInfo progetto ChatApp - Java Edition:"
+                + "\nAutori: Vicentini Elia & Gandini Simone"
+                + "\nVersione: dev01"
+                + "\n\nIl progetto è opensource, potete trovarlo al seguente link:"
+                + "\nhttps://github.com/IlVice26/ChatApp-Java-Edition\n");
+        } else if (inputText.getText().contains("/quit")) {
+            synchronized (data) {
+                for (int i = 0; i < data.getListSocket().size(); i++){
+                    try {
+                        data.getListSocket().get(i).close();
+                    } catch (IOException ex) {
+
+                    }
+                }
+            }
+            System.exit(0);
+        } else {
+            panelArea.append("\nComando sconosciuto\n");
+        }
+        inputText.setText("");
+    }//GEN-LAST:event_sendButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    public static void main(String args[]) throws IOException {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -69,15 +183,42 @@ public class ChatAppServerFrame extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(ChatAppServerFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
+        
+        ChatAppServerFrame.data = new DataContainer();
+        ChatAppServerFrame.serverSocket = new ServerSocket(data.getPortServer());
+        
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
+            public void run(){
                 new ChatAppServerFrame().setVisible(true);
+                try {
+                    startServer(data, serverSocket);
+                } catch (IOException ex) {
+                    System.exit(0);
+                }
             }
         });
     }
+    
+    public static void startServer(DataContainer data, ServerSocket serverSocket) throws IOException {
+        panelArea.append("ChatApp - Java Edition (dev01) - Server"
+                + "\nCopyright 2019 - Vicentini Elia & Simone Gandini"
+                + "\n\nDigita /help per conoscere i comandi\n");
+
+        Scanner keyboard = new Scanner(System.in);
+
+        // Thread per l'accettazione dei socket
+        ThreadConnectionListener lis = new ThreadConnectionListener(data, serverSocket);
+        Thread tLis = new Thread(lis);
+        tLis.start();
+        
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    public static javax.swing.JTextField inputText;
+    private javax.swing.JScrollPane jScrollPane1;
+    private static javax.swing.JTextArea panelArea;
+    private javax.swing.JButton sendButton;
+    private javax.swing.JLabel title;
     // End of variables declaration//GEN-END:variables
 }
