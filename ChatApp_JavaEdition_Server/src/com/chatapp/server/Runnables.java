@@ -49,7 +49,7 @@ public class Runnables implements Runnable {
             buffer = new BufferedWriter(stringaOut);
             out = new PrintWriter(buffer, true);
             out.println("\nBenvenuto sul server: " + data.getNameServer() + "!\n"
-                    + data.getMotdServer() + "\n");
+                    + data.getMotdServer() + "\n\n");
             
             stringaIn = new InputStreamReader(mySock.getInputStream(), StandardCharsets.UTF_8);
             BufferedReader in = new BufferedReader(stringaIn);

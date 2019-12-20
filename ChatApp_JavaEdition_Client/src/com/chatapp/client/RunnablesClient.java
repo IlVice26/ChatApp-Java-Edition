@@ -20,9 +20,9 @@ import java.nio.charset.StandardCharsets;
 public class RunnablesClient implements Runnable {
 
     Socket mySock;
-    ThreadCommandClient thread;
+    ChatAppClientFrame thread;
 
-    RunnablesClient(Socket socket, ThreadCommandClient thread) {
+    RunnablesClient(Socket socket, ChatAppClientFrame thread) {
         this.mySock = socket;
         this.thread = thread;
     }
@@ -35,17 +35,16 @@ public class RunnablesClient implements Runnable {
             while (true) {
                 String mex = in.readLine();
                 if (mex == null) {
-                    System.out.println("Disconnesso dal server, premere invio"
-                            + " per continuare.");
+                    ChatAppClientFrame.panelArea.append("\nDisconnesso dal server, premere invio"
+                            + " per continuare.\n");
                     thread.inChat = false;
                     break;
                 } else {
-                    System.out.println(mex);
+                    ChatAppClientFrame.panelArea.append("\n" + mex);
                 }
             }
         } catch (IOException ex) {
-            System.out.println("Disconnesso dal server, premere invio"
-                            + " per continuare.");
+            ChatAppClientFrame.panelArea.append("\nDisconnesso dal server\n");
             thread.inChat = false;
             try {
                 mySock.close();
